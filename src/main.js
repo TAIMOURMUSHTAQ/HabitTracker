@@ -13,7 +13,6 @@ import {
 } from './date.js';
 import { calculateStreak } from './streaks.js';
 import { renderApp } from './ui.js';
-import './style.css';
 
 const app = document.querySelector('#app');
 
