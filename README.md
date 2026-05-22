@@ -24,12 +24,9 @@ A modern single-page habit tracker built with Vanilla HTML, CSS, JavaScript, and
 - Vite
 
 ## Screenshots
+![alt text](image-1.png)
+![alt text](image.png)
 
-Add screenshots here after running the app locally or deploying it:
-
-- Desktop view placeholder
-- Mobile view placeholder
-- Empty state placeholder
 
 ## Local Setup
 
@@ -57,14 +54,9 @@ This project uses a relative Vite base in `vite.config.js`, so the built files a
 
 1. Run `npm run build`.
 2. Publish the `dist/` folder to GitHub Pages.
-3. If you use a GitHub Pages workflow, point it at the build output in `dist/`.
+3. Deployed At: https://taimourmushtaq.github.io/HabitTracker/
 
-### Vercel
 
-1. Import the repository into Vercel.
-2. Set the build command to `npm run build`.
-3. Set the output directory to `dist`.
-4. Deploy as a static site.
 
 ## Data Model
 

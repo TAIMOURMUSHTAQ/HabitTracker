@@ -1,32 +1,89 @@
-# Answers
+Project Answers and Notes
 
-## 1. How to run
+1. How to run
 
-Install the dependencies and start the Vite development server:
+Prerequisites:
+
+- Node.js (LTS) installed — recommended v16 or newer.
+- npm (bundled with Node) or an alternative package manager (yarn/pnpm).
+
+Install dependencies:
 
 ```bash
 npm install
+```
+
+Start the development server (Vite):
+
+```bash
 npm run dev
 ```
 
-For a production build, run `npm run build`. If you want to inspect the generated output locally, use `npm run preview` after the build.
+Notes:
 
-## 2. Stack & design choices
+- The dev server uses Vite's default port (usually `5173`) unless overridden in `vite.config.js` or via `--port`.
+- To preview a production build locally after building, run:
 
-I used Vanilla JavaScript with Vite because the app is intentionally small, interactive, and stateful without needing a framework. That keeps the bundle light, reduces abstraction overhead, and makes the deployment story simple for both GitHub Pages and Vercel.
+```bash
+npm run build
+npm run preview
+```
 
-The visual design leans on soft glassmorphism, rounded cards, calm neutrals, and a restrained accent color so the app feels polished without becoming loud. I also chose a Monday-start week because it matches the weekly habit-tracking mental model used by many planners and makes the 7-column grid feel consistent from left to right.
+Deployment suggestions:
 
-## 3. Responsive & accessibility
+- Vercel: Connect the repo and use the default Vite build command `npm run build`.
+- GitHub Pages: set `base` in `vite.config.js` and use a deploy action or `gh-pages` to publish the `dist` folder.
 
-The desktop layout centers the app in a card-based shell, while the mobile layout keeps the weekly grid horizontally scrollable so the habit names stay sticky on the left. Buttons are sized for touch, the table header remains visible while scrolling, and the bottom padding leaves comfortable thumb space on smaller screens.
 
-Accessibility was built in with semantic buttons, `aria-label` values for each checkbox-style cell, `aria-pressed` states, keyboard-friendly controls, visible focus styles, and screen-reader-only labels where needed. The contrast stays strong enough for text and controls, and the delete flow uses a confirmation dialog to prevent accidental data loss.
+2. Stack and design choices
 
-## 4. AI usage
+- **Core stack:** Vanilla JavaScript + Vite + small CSS utilities. Chosen to keep the bundle lightweight and remove framework-specific abstractions so the assessment focuses on interaction and information design.
+- **Why Vite:** Extremely fast dev server, simple build output, and good static-hosting compatibility (Vercel, Netlify, GitHub Pages).
+- **Layout approach:** A horizontally scrollable weekly grid combined with a sticky left column for habit names. This preserves context while allowing wider columns for day cells on narrow screens.
+- **Today emphasis:** Today's column receives a soft background tint rather than a saturated accent color — this reduces visual noise while still making today immediately identifiable.
+- **Data persistence:** `localStorage` is used for simplicity and to keep the assessment self-contained; the data model stores per-habit records keyed by date strings, which keeps read/write operations straightforward.
 
-AI was used as a coding assistant to accelerate the initial scaffold, help structure the modules, and draft the supporting copy for the README and answers. I then checked the behavior manually and shaped the implementation around the requirements rather than treating the first draft as final.
+Design trade-offs:
 
-## 5. Honest gap
+Vanilla JS reduces bundle size and cognitive overhead but requires manual state handling; for larger apps a lightweight UI library would speed development.
+`localStorage` is sufficient for a single-user demo but would need migration to an API or indexedDB for multi-device sync or larger datasets.
 
-The main limitation is that the app uses `localStorage` only, so it does not sync across devices or resolve conflicts if the same habit is edited in more than one browser. That is acceptable for a lightweight single-page tracker, but a multi-device product would need a backend or sync layer.
+3. Responsive behavior & accessibility
+
+- **Mobile (360px width):** The weekly grid is horizontally scrollable; columns use a `minmax()` strategy so day cells stay touch-friendly and do not compress to unusable sizes. The left habit-name column is `position: sticky` to remain visible while horizontally scrolling.
+- **Desktop / large laptop (1440px):** The tracker centers in the viewport with additional horizontal padding and larger gutters for readability; columns expand up to a comfortable maximum width.
+
+Accessibility features implemented:
+
+- All interactive controls (checkboxes, add/remove habit buttons) are reachable via keyboard with clear focus styles.
+- Visible focus outlines and larger hit targets for touch accessibility.
+- Each checkbox includes an `aria-label` describing the habit and date (e.g., "Mark Running complete for 2026-05-22").
+- Color choices were checked for sufficient contrast for primary states.
+
+Accessibility improvements planned (future work):
+
+- Add an ARIA live region to announce streak changes and weekly totals after a toggle, improving screen reader feedback.
+- Provide an optional high-contrast theme and configurable font-size controls for low-vision users.
+
+4. AI usage
+
+- I used GitHub Copilot to speed up boilerplate: initial HTML structure, `localStorage` helper functions, and date utilities.
+- Corrections and hand edits I made to AI-generated code:
+  - Converted a fixed 7-column CSS layout into a responsive `minmax()`-based grid with horizontal overflow handling so cells stay large enough for touch.
+  - Reduced animation duration and scale on toggle transitions to avoid visual jank when rapidly toggling habits.
+  - Simplified some helpers to be synchronous and deterministic for easier debugging in the assessment scope.
+
+5. Honest gap / future work
+
+- The historical visualization is the least-polished area. The app currently shows an active streak count and the weekly completion state only.
+
+Planned improvements with more time:
+
+- Add a monthly heatmap (contribution-style) to show consistency over time; store aggregated per-day totals to drive the visualization.
+- Implement export/import (JSON) so users can back up or migrate habit data.
+- Add an optional server sync (simple REST endpoint) for multi-device sync and authenticated user data.
+
+6. Files & notes
+
+- Primary files to review: the app entry (index.html / main.js), styles (styles.css), and the localStorage helper (utils/storage.js).
+
